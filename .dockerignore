@@ -1,0 +1,9 @@
+.git
+.venv
+entregables
+evidencias
+informe
+tests
+*.db
+__pycache__
+.env

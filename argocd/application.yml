@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pedal-club
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YVghost/automatizacion_de_la_configuracion_continua.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pedal-club
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      name: pedal-club
+      jsonPointers:
+        - /spec/replicas

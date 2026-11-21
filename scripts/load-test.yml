@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pedal-load
+  namespace: pedal-club
+spec:
+  activeDeadlineSeconds: 240
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: load
+          image: python:3.11-alpine
+          command:
+            - python
+            - -c
+            - |
+              import concurrent.futures, time, urllib.request
+              end = time.monotonic() + 210
+              def run(_):
+                  while time.monotonic() < end:
+                      try:
+                          with urllib.request.urlopen('http://pedal-club/api/demo/work', timeout=10) as response:
+                              response.read()
+                      except Exception:
+                          pass
+              with concurrent.futures.ThreadPoolExecutor(max_workers=16) as pool:
+                  list(pool.map(run, range(16)))
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi

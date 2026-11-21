@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.db
+.env
+entregables/
+evidencias/
+informe/
+*.log
+node_modules/
