@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pedal-club
+  annotations:
+    practica.gitops/validacion: sincronizacion-automatica
   labels:
     app: pedal-club
 spec:
