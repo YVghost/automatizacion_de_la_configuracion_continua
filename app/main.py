@@ -7,7 +7,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
-from sqlalchemy import ForeignKey, LargeBinary, String, create_engine, func, select
+from sqlalchemy import ForeignKey, LargeBinary, String, create_engine, func, select, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 engine = create_engine(os.getenv("DATABASE_URL", "sqlite:///./ciclistas.db"), pool_pre_ping=True)
@@ -38,7 +38,10 @@ class Review(Base):
 
 @asynccontextmanager
 async def lifespan(app):
-    Base.metadata.create_all(engine)
+    with engine.begin() as connection:
+        if engine.dialect.name == "postgresql":
+            connection.execute(text("SELECT pg_advisory_xact_lock(73001)"))
+        Base.metadata.create_all(connection)
     yield
 
 
