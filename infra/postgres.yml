@@ -41,6 +41,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:16-alpine
+          imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRES_USER
               value: pedal

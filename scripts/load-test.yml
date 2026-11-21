@@ -11,7 +11,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: load
-          image: python:3.11-alpine
+          image: ghcr.io/yvghost/automatizacion_de_la_configuracion_continua:1.0.0
+          imagePullPolicy: IfNotPresent
           command:
             - python
             - -c
