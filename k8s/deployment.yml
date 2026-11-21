@@ -24,6 +24,9 @@ spec:
         - name: web
           image: ghcr.io/yvghost/automatizacion_de_la_configuracion_continua:1.0.0
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: temporary-files
+              mountPath: /tmp
           ports:
             - name: http
               containerPort: 8000
@@ -57,3 +60,7 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
+      volumes:
+        - name: temporary-files
+          emptyDir:
+            sizeLimit: 32Mi
